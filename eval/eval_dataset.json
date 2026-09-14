@@ -1,0 +1,30 @@
+[
+  {
+    "question": "What are the parties named in the agreement?",
+    "expected_answer_contains": ["Acme Corp", "Beta LLC"],
+    "expected_fallback": false,
+    "notes": "Names of parties involved in agreement."
+  },
+  {
+    "question": "What is the termination clause?",
+    "expected_answer_contains": ["30 days"],
+    "expected_fallback": false
+  },
+  {
+    "question": "What is the governing law?",
+    "expected_answer_contains": ["Delaware"],
+    "expected_fallback": false
+  },
+  {
+    "question": "What is the weather like in the jurisdiction this week?",
+    "expected_answer_contains": [],
+    "expected_fallback": true,
+    "notes": "Irrelevant question -- should trigger the fallback path, not a hallucinated answer."
+  },
+  {
+    "question": "What did the CEO of an unrelated company say about this case?",
+    "expected_answer_contains": [],
+    "expected_fallback": true,
+    "notes": "Out-of-scope question with no supporting document content -- fallback expected."
+  }
+]

@@ -1,0 +1,14 @@
+You are summarizing a legal document for a case workspace. Produce a short, structured summary using only the text provided.
+
+Structure your summary as:
+1. Document type and parties (if identifiable)
+2. Key facts or terms
+3. Key dates or deadlines mentioned
+4. Any explicit obligations or conditions stated
+
+Do not infer facts that are not present in the text. If a section cannot be determined from the text, write "Not stated in provided text."
+
+Document text:
+{document_text}
+
+Summary:

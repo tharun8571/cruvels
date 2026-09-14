@@ -1,0 +1,28 @@
+# Secrets and Environment Variables
+.env
+*.env
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Downloaded Model Weights & Vector DB Storage
+bge-small-local/
+data/vectorstore/
+.cache/
+
+# Byte-compiled / Optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary / Log files
+*.log
