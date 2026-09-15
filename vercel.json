@@ -3,15 +3,24 @@
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
+      "use": "@vercel/python"
+    },
+    {
+      "src": "static/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/(.*\\.(js|css|html|ico|png|jpg|svg|woff2?))",
       "dest": "/static/$1"
     },
     {
@@ -22,6 +31,7 @@
   "env": {
     "LLM_PROVIDER": "openrouter",
     "LLM_MODEL": "moonshotai/kimi-k2.5",
-    "EMBEDDING_MODEL": "BAAI/bge-small-en-v1.5"
+    "EMBEDDING_PROVIDER": "openai",
+    "EMBEDDING_MODEL": "text-embedding-3-small"
   }
 }

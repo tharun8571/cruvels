@@ -5,9 +5,6 @@ retrieval logic.
 """
 from __future__ import annotations
 
-from langchain_openai import OpenAIEmbeddings
-from langchain_huggingface import HuggingFaceEmbeddings
-
 from src.config import get_settings
 
 
@@ -17,8 +14,18 @@ def get_embeddings():
     model = settings["embeddings"]["model"]
 
     if provider == "huggingface":
-        return HuggingFaceEmbeddings(model_name=model)
-    elif provider == "openai":
+        try:
+            from langchain_huggingface import HuggingFaceEmbeddings  # noqa: PLC0415
+            return HuggingFaceEmbeddings(model_name=model)
+        except ImportError as exc:
+            raise ImportError(
+                "langchain-huggingface and sentence-transformers are required for "
+                "the 'huggingface' embeddings provider. "
+                "Install them or set EMBEDDING_PROVIDER=openai in your environment."
+            ) from exc
+
+    if provider == "openai":
+        from langchain_openai import OpenAIEmbeddings  # noqa: PLC0415
         return OpenAIEmbeddings(model=model)
 
     raise ValueError(f"Unsupported embeddings provider: {provider}")

@@ -166,7 +166,10 @@ async def upload_document(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Ingestion failed: {str(e)}")
 
 
-# Serve static web frontend
+# Serve static web frontend (local dev only; on Vercel static files are
+# served directly by the edge CDN via vercel.json routes)
 static_dir = Path(__file__).resolve().parent.parent.parent / "static"
-static_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
+if static_dir.exists():
+    app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
+else:
+    logger.warning("Static directory not found at %s — skipping static mount", static_dir)
