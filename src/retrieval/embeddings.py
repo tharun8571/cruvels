@@ -23,12 +23,9 @@ def get_embeddings():
         try:
             from langchain_huggingface import HuggingFaceEmbeddings  # noqa: PLC0415
             return HuggingFaceEmbeddings(model_name=model)
-        except ImportError as exc:
-            raise ImportError(
-                "sentence-transformers is required for provider='huggingface'. "
-                "Run: pip install sentence-transformers  "
-                "OR set EMBEDDING_PROVIDER=huggingface-api to use the free HF Inference API instead."
-            ) from exc
+        except ImportError:
+            # Fall back to API if sentence-transformers is missing
+            provider = "huggingface-api"
 
     # ── HuggingFace Inference API (no local model, works on Vercel) ────────
     if provider == "huggingface-api":
@@ -43,8 +40,8 @@ def get_embeddings():
         hf_token = os.getenv("HF_TOKEN") or os.getenv("HUGGINGFACEHUB_API_TOKEN")
         if not hf_token:
             raise EnvironmentError(
-                "HF_TOKEN env variable is required for provider='huggingface-api'. "
-                "Get a free token at https://huggingface.co/settings/tokens"
+                "HF_TOKEN environment variable is required for embeddings. "
+                "Please add HF_TOKEN to your environment variables."
             )
         return HuggingFaceEndpointEmbeddings(
             model=model,
