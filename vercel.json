@@ -1,16 +1,14 @@
 {
   "functions": {
+    "src/api/main.py": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
     "api/index.py": {
       "maxDuration": 60,
       "memory": 1024
     }
   },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
-    }
-  ],
   "env": {
     "LLM_PROVIDER": "openrouter",
     "LLM_MODEL": "moonshotai/kimi-k2.5",
