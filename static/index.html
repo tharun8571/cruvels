@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cruvels AI Legal Knowledge Assistant</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>Cruvels AI</h2>
+                    <span class="badge">Legal RAG v1.0</span>
+                </div>
+            </div>
+
+            <!-- Status Indicator -->
+            <div class="status-card" id="statusCard">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text" id="statusText">Connecting...</span>
+                </div>
+                <div class="model-info">
+                    <span id="modelBadge"><i class="fa-solid fa-brain"></i> OpenRouter (Kimi K2.5)</span>
+                    <span id="embedBadge"><i class="fa-solid fa-vector-square"></i> BGE-small-en-v1.5</span>
+                </div>
+            </div>
+
+            <!-- Quick Action: Upload Document -->
+            <div class="section-title">
+                <i class="fa-solid fa-folder-open"></i> Knowledge Base
+            </div>
+            
+            <div class="upload-zone" id="dropZone">
+                <input type="file" id="fileInput" accept=".pdf,.txt,.docx" hidden>
+                <div class="upload-content">
+                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                    <p><strong>Click or Drag PDF/TXT</strong></p>
+                    <span>Upload legal document</span>
+                </div>
+            </div>
+
+            <!-- Ingested Document List -->
+            <div class="document-list-container">
+                <div class="doc-header">
+                    <span>Ingested Files</span>
+                    <div class="doc-header-actions">
+                        <button class="icon-btn" id="refreshDocsBtn" title="Refresh files"><i class="fa-solid fa-rotate-right"></i></button>
+                        <button class="icon-btn icon-btn-danger" id="clearKbBtn" title="Clear Knowledge Base"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>
+                <ul class="document-list" id="documentList">
+                    <li class="empty-doc">No documents ingested</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-chip">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <div class="user-info">
+                        <span class="user-name">Firm Member</span>
+                        <span class="user-role">Scope: Shared / Internal</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Content -->
+        <main class="chat-main">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-title">
+                    <h1>AI Legal Assistant</h1>
+                    <p>Agentic Document Understanding & Legal Contract Q&A</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="clearChatBtn">
+                        <i class="fa-solid fa-broom"></i> Clear Chat
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Messages Container -->
+            <div class="chat-viewport" id="chatViewport">
+                <!-- Welcome Screen / Sample Prompts -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon">
+                        <i class="fa-solid fa-file-contract"></i>
+                    </div>
+                    <h2>Welcome to Cruvels Legal RAG</h2>
+                    <p>Ask questions about your ingested contracts, non-disclosure agreements, clauses, parties, or obligations.</p>
+                    
+                    <div class="sample-prompts">
+                        <button class="prompt-card" data-prompt="Who are the parties named in the Cruvels agreement?">
+                            <i class="fa-solid fa-users-gear"></i>
+                            <span>Who are the parties in the agreement?</span>
+                        </button>
+                        <button class="prompt-card" data-prompt="What is the internship duration and remote work policy?">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Internship duration & remote work policy</span>
+                        </button>
+                        <button class="prompt-card" data-prompt="What are the confidentiality obligations and post-internship restrictions?">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Confidentiality & post-internship protection</span>
+                        </button>
+                        <button class="prompt-card" data-prompt="What is the governing law and jurisdiction?">
+                            <i class="fa-solid fa-gavel"></i>
+                            <span>Governing law & court jurisdiction</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages"></div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <footer class="chat-input-area">
+                <form id="chatForm" class="input-wrapper">
+                    <textarea 
+                        id="userQuery" 
+                        placeholder="Ask any legal or contract question... (e.g. 'What is the termination clause?')"
+                        rows="1"
+                        required
+                    ></textarea>
+                    <button type="submit" class="send-btn" id="sendBtn" title="Send Question">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+                <div class="input-disclaimer">
+                    <i class="fa-solid fa-circle-info"></i> All answers include verifiable document citations and fall back when evidence is absent.
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
