@@ -20,6 +20,7 @@ dependencies = [
     "pymupdf>=1.24.0",
     "numpy>=1.26.0",
     "python-multipart>=0.0.9",
+    "langchain-huggingface>=0.1.0",
 ]
 
 [tool.vercel]
