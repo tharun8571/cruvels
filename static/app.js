@@ -170,17 +170,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: "POST",
                 body: formData
             });
-            if (res.ok) {
-                const data = await res.json();
-                statusText.textContent = "API Ready";
+
+            const text = await res.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = null;
+            }
+
+            statusText.textContent = "API Ready";
+
+            if (res.ok && data) {
                 fetchDocuments();
                 alert(`Uploaded and ingested ${data.filename} (${data.chunks_ingested} chunks)`);
             } else {
-                const err = await res.json();
-                alert("Upload failed: " + (err.detail || "Error uploading file"));
+                const errMsg = (data && data.detail) ? data.detail : (text || `HTTP ${res.status} ${res.statusText}`);
+                alert("Upload failed: " + errMsg);
             }
         } catch (err) {
-            alert("Error connecting to server during upload");
+            statusText.textContent = "API Ready";
+            console.error("Upload error:", err);
+            alert("Error connecting to server during upload: " + err.message);
         }
     }
 
@@ -204,16 +215,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
             removeLoading(loadingId);
 
-            if (res.ok) {
-                const data = await res.json();
+            const text = await res.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = null;
+            }
+
+            if (res.ok && data) {
                 appendMessage("assistant", data.answer, data.sources, data.is_fallback);
             } else {
-                const err = await res.json();
-                appendMessage("assistant", "⚠️ **Error processing request**: " + (err.detail || "Server error"));
+                const errMsg = (data && data.detail) ? data.detail : (text || `HTTP ${res.status}`);
+                appendMessage("assistant", "⚠️ **Error processing request**: " + errMsg);
             }
         } catch (err) {
             removeLoading(loadingId);
-            appendMessage("assistant", "⚠️ **Network Error**: Unable to reach backend server.");
+            appendMessage("assistant", "⚠️ **Network Error**: " + err.message);
         }
     }
 
